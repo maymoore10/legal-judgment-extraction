@@ -55,7 +55,8 @@ python test.py
 - **Huggingface Transformers/**
 - **PyTorch/**
 - **Scikit-learn/**
-- **/**
-- **/**
-- **/**
-- **/**
+- **sentence_transformers/**
+- **nltk/**
+- **numpy/**
+- **Pandas/**
+
