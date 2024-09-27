@@ -32,14 +32,23 @@ To train an information retrieval model, navigate to the `scripts/information_re
 ```bash
 python train_ir_alephbert.py
 ```
+The script will store the model in `models/yyyymmdd/your-path`
 
 ### Example: Test Information Retrieval Models
-To train an information retrieval model, navigate to the `scripts/information_retrieval/` directory and run the appropriate training script. For example, to train AlephBERT:
+To evaluate a trained model, use the test.py script inside the `scripts/information_retrieval/` directory and run the appropriate test script:
 
 ```bash
 python test.py
 ```
+The script store test results in `results/yyyymmdd/your-path`
 
+### Example: Evaluate
+To evaluate results, use the evaluate.py, bertscore.py and/or semantic-similarity.py script inside the `scripts/evaluations/` directory and run the appropriate script:
+
+```bash
+python evaluate.py
+```
+The script will go over test results and score the perfomance based on the relavant metric and save it in `scripts/evaluations/results/yyyymmdd`
 
 ## Model Description
 
