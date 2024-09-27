@@ -51,12 +51,12 @@ python test.py
 
   ## Requirements
 
-- **Python 3.8+/**
-- **Huggingface Transformers/**
-- **PyTorch/**
-- **Scikit-learn/**
-- **sentence_transformers/**
-- **nltk/**
-- **numpy/**
-- **Pandas/**
+- **Python 3.8+**
+- **Huggingface Transformers**
+- **PyTorch**
+- **Scikit-learn**
+- **sentence_transformers**
+- **nltk**
+- **numpy**
+- **Pandas**
 
