@@ -29,72 +29,26 @@ models = [
     }
 ]
 
-scorer = BERTScorer(model_type='bert-base-uncased')
 
-def bert_score3(references, candidates, model, tokenizer):
-    # BERTScore calculation
+def bert_score(references, candidates, model, tokenizer):
     evaluations = []
     for (reference, candidate) in zip(references, candidates):
-        P, R, F1 = scorer.score([candidate], [reference])
-        print(f"BERTScore Precision: {P.mean():.4f}, Recall: {R.mean():.4f}, F1: {F1.mean():.4f}")
-        evaluations.append(F1.mean().item())
-    if len(evaluations) == 0:
-        return 0
-    return statistics.mean(evaluations)
-
-
-def bert_score2(references, candidates, model, tokenizer):
-    evaluations = []
-    for (reference, candidate) in zip(references, candidates):
-        # Step 4: Prepare the texts for BERT
         inputs1 = tokenizer(reference, return_tensors="pt", padding=True, truncation=True)
         inputs2 = tokenizer(candidate, return_tensors="pt", padding=True, truncation=True)
 
-        # Step 5: Feed the texts to the BERT model
         outputs1 = model(**inputs1)
         outputs2 = model(**inputs2)
 
-        # Step 6: Obtain the representation vectors
         embeddings1 = outputs1.last_hidden_state.mean(dim=1).detach().numpy()
         embeddings2 = outputs2.last_hidden_state.mean(dim=1).detach().numpy()
 
-        # Step 7: Calculate cosine similarity
         similarity = np.dot(embeddings1, embeddings2.T) / (np.linalg.norm(embeddings1) * np.linalg.norm(embeddings2))
 
-        # Step 8: Print the result
         evaluations.append(similarity[0][0])
     if len(evaluations) == 0:
         return 0
     return statistics.mean(evaluations)
 
-
-def bert_score1(references, candidates):
-    # Ensure references and candidates are lists of strings
-    references = references.tolist()
-    candidates = candidates.tolist()
-
-    # Initialize BERT model and tokenizer
-    tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-    model = BertModel.from_pretrained('bert-base-uncased')
-    # Tokenize and encode the references and candidates
-    encoded_references = tokenizer(references, padding=True, truncation=True, return_tensors='pt')
-    encoded_candidates = tokenizer(candidates, padding=True, truncation=True, return_tensors='pt')
-
-    # Ensure the tensors have compatible dimensions
-    max_len = max(encoded_references['input_ids'].size(1), encoded_candidates['input_ids'].size(1))
-    encoded_references['input_ids'] = torch.nn.functional.pad(encoded_references['input_ids'], (0, max_len - encoded_references['input_ids'].size(1)))
-    encoded_candidates['input_ids'] = torch.nn.functional.pad(encoded_candidates['input_ids'], (0, max_len - encoded_candidates['input_ids'].size(1)))
-
-    # BERTScore calculation
-    with torch.no_grad():
-        ref_outputs = model(**encoded_references)
-        cand_outputs = model(**encoded_candidates)
-
-    # Calculate precision, recall, and F1 score
-    P = torch.mean(ref_outputs.last_hidden_state, dim=1)
-    R = torch.mean(cand_outputs.last_hidden_state, dim=1)
-    F1 = 2 * (P * R) / (P + R + 1e-8)
-    return {'precision': P.mean().item(), 'recall': R.mean().item(), 'F1': F1.mean().item()}
 
 
 reference_path = annotated_sentences_test
@@ -117,10 +71,7 @@ for m in models:
                 filtered_results = merged_df.dropna(subset=['result', 'label'])[:200]
                 print(f"after filtering size: {len(filtered_results)}")
 
-                # bertscore1 = bert_score1(filtered_results['label'], filtered_results['result'])
-                # evaluations.append({'filename': filename, 'precision': precision, 'recall': recall, 'f1': f1})
-                # bertscore2 = bert_score2(filtered_results['label'], filtered_results['result'], model, tokenizer)
-                bertscore3 = bert_score3(filtered_results['label'], filtered_results['result'], model, tokenizer)
-                evaluations.append({'filename': filename, 'bertscore3': bertscore3})
+                bertscore = bert_score(filtered_results['label'], filtered_results['result'], model, tokenizer)
+                evaluations.append({'filename': filename, 'bertscore': bertscore})
 
-    save_csv_file(os.path.join('results','test',f"evaluations_bertscore3_{today_format}_{model_name}.csv"), evaluations)
+    save_csv_file(os.path.join('results','test',f"evaluations_bertscore_{today_format}_{model_name}.csv"), evaluations)

@@ -14,14 +14,13 @@ models = [
 
 def semantic_similarity(sentences1, sentences2, model):
     scores = []
-    # Step 1: Convert sentences to embeddings
+    # Convert sentences to embeddings
     for sentence1, sentence2 in zip(sentences1, sentences2):
         try:
             embeddings = model.encode([prepare_input(sentence1), prepare_input(sentence2)])
         except Exception as e:
             print(f"Error: {sentence1}, {sentence2}")
             continue
-        # Step 2: Compute cosine similarity between the two sentence embeddings
         similarity_score = cosine_similarity([embeddings[0]], [embeddings[1]])[0][0]
         scores.append(similarity_score)
 

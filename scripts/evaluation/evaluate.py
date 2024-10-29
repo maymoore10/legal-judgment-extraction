@@ -12,7 +12,7 @@ from utils.utils import *
 
 
 def tokenize(sentences):
-    """Tokenize a list of criminal."""
+    """Tokenize a list of sentences."""
     return [nltk.word_tokenize(sentence) for sentence in sentences]
 
 
