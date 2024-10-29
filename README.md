@@ -57,6 +57,16 @@ The script will go over test results and score the perfomance based on the relav
 - **mBERT/**: Multilingual BERT model capable of processing Hebrew text, fine-tuned for information retrieval.
 - **mT5-small/**: A multilingual version of the T5 model, fine-tuned for sequence-to-sequence tasks like summarization and question answering in Hebrew.
 
+## Adding Model for Test Execution
+If you wish to run test on multiple models, you can add to the models list a definition of the model: name, tokenizer, and model.for example:
+```bash
+    {
+        'model_name': 'mt5-ft-3e05',
+        'tokenizer': MT5Tokenizer.from_pretrained(mt5_small_path3e05),
+        'model': MT5ForSequenceClassification.from_pretrained(mt5_small_path3e05)
+    }
+```
+
 
   ## Requirements
 
