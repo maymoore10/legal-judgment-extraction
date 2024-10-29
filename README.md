@@ -62,8 +62,8 @@ If you wish to run test on multiple models, you can add to the models list a def
 ```bash
     {
         'model_name': 'mt5-ft-3e05',
-        'tokenizer': MT5Tokenizer.from_pretrained(mt5_small_path3e05),
-        'model': MT5ForSequenceClassification.from_pretrained(mt5_small_path3e05)
+        'tokenizer': MT5Tokenizer.from_pretrained('mt5-ft-path'),
+        'model': MT5ForSequenceClassification.from_pretrained('mt5-ft-path')
     }
 ```
 
